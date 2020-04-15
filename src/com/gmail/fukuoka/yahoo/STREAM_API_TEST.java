@@ -76,8 +76,10 @@ public class STREAM_API_TEST {
             .thenComparing(TestRecodeDto::getBigKey2, Comparator.nullsLast(Comparator.reverseOrder()))
         )
 		// の先頭を採用する
-		.findFirst().orElseGet(() -> null);
-
+        .findFirst().orElseGet(() -> null);
+        
+        // SUM
+        BigDecimal gigSum = dataList.stream().reduce(BigDecimal.ZERO, (bdValue, dto) -> bdValue.add(Optional.ofNullable(dto.getValue()).orElse(BigDecimal.ZERO)), (bdResult1, bdResult2) -> bdResult1.add(bdResult2));
         // GROUP BY
         final Map<MultipleKey, List<TestRecodeDto>> groupByMap = dataList.stream().collect(Collectors.groupingBy(dto -> new MultipleKey(dto.getStrKey1(), dto.getBigKey2(), dto.getBooKey3())));
         // GROUP BY SUM
